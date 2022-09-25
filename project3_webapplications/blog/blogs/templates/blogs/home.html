@@ -1,0 +1,21 @@
+<p>Blog Site:- Create blogs and share your daily knowledge with everyone
+else!</p>
+
+<p>Blogs:<p>
+
+<a href="{% url 'blogs:new_blog' %}">Create a new blog</a>
+
+<ul>
+  {% for blog_post in blog_posts %}
+    <li>
+      <p>  Date of creation:- {{blog_post.date_added|date:'M d, Y H:i'}}</p>
+      <p>  Title:- {{blog_post.title}}</p>
+      <p>  Post:- {{blog_post.text}}</p>
+      <p>
+        <a href="{% url 'blogs:edit_blog' blog_post.id %}">Edit blog</a>
+      </p>
+    </li>
+  {% empty %}
+    <li>  There are no blogs posted yet.</li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,13 @@
+In Python, you can use variables to store values.
+In Python, you can use strings for sentences.
+In Python, you can 'print' strings or any stored value.
+In Python, you can use user input to make personalized code.
+In Python, you can import modules to further enhance your code and it's functionality.
+In Python, you can use functions to handle certain tasks in an organized way.
+In Python, you can use lists to store a list of related items.
+In Python, you can use dictionaries to store key-value pairs(general thing- specifics of the thing), all related in atleast one way.
+In Python, you can use for loops to access and show items of lists and dictionaries one by one.
+In Python, you can use while loops to handle a certain task infinitely or until a given condition fails.
+In Python, you can use boolean expressions or if-elif-else statements to do tasks conditionally.
+In Python, you can use files to store textual infomation that can be accessed, shown and modified.
+In Python, you can use object oriented programmming to depict real life models, objects and such.

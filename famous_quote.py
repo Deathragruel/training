@@ -1,0 +1,1 @@
+print('\tThe Holy Prophet (pbuh) once said,\n\t "Modesty produces nothing but good."')

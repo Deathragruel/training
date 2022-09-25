@@ -1,0 +1,11 @@
+cars = ['bmw', 'audi', 'toyota', 'subaru']
+print(f"Here is the original list:\n {cars}")
+print(f"\nHere is the sorted list:\n {sorted(cars)}")
+print(f"\nHere is the original list again:\n {cars}")
+print(f"\nHere is the reverse sorted list:\n {sorted(cars, reverse = True)}")
+print(f"\nHere is the original list another time:\n {cars}")
+cars.reverse()
+print(f"\nHere is the reversed original list: {cars}")
+cars.reverse()
+print(f"\nBack to the original list: {cars}")
+print(f"\n The amount of elements in our list are {len(cars)}")

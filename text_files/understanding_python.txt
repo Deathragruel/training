@@ -1,0 +1,215 @@
+Function, package, method, class etc. -  Information
+pygame.init() - Initializes all pygame modules. Returns a tuple of successful and failed inits. Can be used to initialize individual modules as well. 
+pygame.display - Module for showing display with origin at topleft of the screen positively increasing downwards.
+pygame.display.set_mode() - set_mode(size=(0, 0), flags=0, depth=0, display=0, vsync=0) -> Surface - is the details of the function and it's arguments. The flags argument controls which type of display you want. There are several to choose from, and you can even combine multiple types using the bitwise or operator, (the pipe "|" character). Here are the display flags you will want to choose from:
+
+pygame.FULLSCREEN    create a fullscreen display
+pygame.DOUBLEBUF     (obsolete in pygame 2) recommended for HWSURFACE or OPENGL
+pygame.HWSURFACE     (obsolete in pygame 2) hardware accelerated, only in FULLSCREEN
+pygame.OPENGL        create an OpenGL-renderable display
+pygame.RESIZABLE     display window should be sizeable
+pygame.NOFRAME       display window will have no border or controls
+pygame.SCALED        resolution depends on desktop size and scale graphics
+pygame.SHOWN         window is opened in visible mode (default)
+pygame.HIDDEN        window is opened in hidden mode
+
+pygame.display.set_caption() - Set the current window caption
+                               set_caption(title, icontitle=None) -> None
+                               icon means: https://www.google.com/search?q=what+is+icon+in+programming&oq=what+is+an+icon+in+progr&aqs=chrome.1.69i57j0i22i30j0i15i22i30j0i22i30j0i390l2.9119j0j7&sourceid=chrome&ie=UTF-8
+pygame.display.flip() -
+Update the full display Surface to the screen
+flip() -> None
+This will update the contents of the entire display. 
+
+pygame.event - https://www.pygame.org/docs/ref/event.html
+info about events - Basically, the OS expects pygame to handle events during your program. If the OS notice that events aren't handled, it'll alert the user. The program doesn't actually crash or freeze, the OS is just saying that your program has become unresponsive (which it has because you're not responding to any user events), but it still works.
+
+When your game is entering small scenes you might think that you don't need to handle events, but there is one event you should always check for: the pygame.QUIT event (sent when the user press the close button at the top corner). In your example you're not allowing the user to quit during the game over sequence (you're providing the player a button to click but a user would also expect clicking the close button would close the game as well).
+
+Another reason is that the event queue is constantly filling up. So if the user would spam multiple keys and press multiple areas with the mouse, nothing would happen until he/she enters the game again (where you have an event loop). Then every event would be executed. Therefore it's important to regularly empty the queue. The queue is emptied every time you call pygame.event.get() or pygame.event.clear().
+
+The function pygame.event.pump() is the function that put all events into the event queue (it doesn't clear the previous events, it just adds). The event queue won't be filled/updated with any events if the function isn't called. However, the function is implicitly called inside the functions pygame.event.get(), pygame.event.clear(), pygame.event.poll(), pygame.event.wait() and pygame.event.peek(), so there is rarely a reason to call it explicitly. If you are sure you don't want to handle events at some time, you could use pygame.event.clear() so the event queue is empty when you start processing events again. If you don't want to handle events at all, then use pygame.event.pump().
+
+# Can be any surface.
+pygame.Surface.fill()
+fill()
+fill Surface with a solid color
+fill(color, rect=None, special_flags=0) -> Rect
+Fill the Surface with a solid color. If no rect argument is given the entire Surface will be filled. The rect argument will limit the fill to a specific area. The fill will also be contained by the Surface clip area.
+
+The color argument can be either a RGB sequence, a RGBA sequence or a mapped color index. If using RGBA, the Alpha (A part of RGBA) is ignored unless the surface uses per pixel alpha (Surface has the SRCALPHA flag).
+New in pygame 1.8: Optional special_flags: BLEND_ADD, BLEND_SUB, BLEND_MULT, BLEND_MIN, BLEND_MAX.
+
+New in pygame 1.8.1: Optional special_flags: BLEND_RGBA_ADD, BLEND_RGBA_SUB, BLEND_RGBA_MULT, BLEND_RGBA_MIN, BLEND_RGBA_MAX BLEND_RGB_ADD, BLEND_RGB_SUB, BLEND_RGB_MULT, BLEND_RGB_MIN, BLEND_RGB_MAX.
+
+get_rect() -
+get the rectangular area of the Surface
+get_rect(**kwargs) -> Rect
+Returns a new rectangle covering the entire surface. This rectangle will always start at (0, 0) with a width and height the same size as the image.
+
+You can pass keyword argument values to this function. These named values will be applied to the attributes of the Rect before it is returned. An example would be mysurf.get_rect(center=(100, 100)) to create a rectangle for the Surface centered at a given position.
+
+get_window_size() - returns the x,y coordinate values of the window size in tuple form for usage.
+
+blit()
+draw one image onto another
+blit(source, dest, area=None, special_flags=0) -> Rect
+Draws a source Surface onto this Surface. The draw can be positioned with the dest argument. The dest argument can either be a pair of coordinates representing the position of the upper left corner of the blit or a Rect, where the upper left corner of the rectangle will be used as the position for the blit. The size of the destination rectangle does not effect the blit.
+
+An optional area rectangle can be passed as well. This represents a smaller portion of the source Surface to draw.
+The return rectangle is the area of the affected pixels, excluding any pixels outside the destination Surface, or outside the clipping area.
+
+Pixel alphas will be ignored when blitting to an 8 bit Surface.
+
+For a surface with colorkey or blanket alpha, a blit to self may give slightly different colors than a non self-blit.
+
+pygame.image.load()
+load new image from a file (or file-like object)
+load(filename) -> Surface
+load(fileobj, namehint="") -> Surface
+Load an image from a file source. You can pass either a filename, a Python file-like object, or a pathlib.Path.
+
+Pygame will automatically determine the image type (e.g., GIF or bitmap) and create a new Surface object from the data. In some cases it will need to know the file extension (e.g., GIF images should end in ".gif"). If you pass a raw file-like object, you may also want to pass the original filename as the namehint argument.
+
+The returned Surface will contain the same color format, colorkey and alpha transparency as the file it came from. You will often want to call Surface.convert() with no arguments, to create a copy that will draw more quickly on the screen.
+
+For alpha transparency, like in .png images, use the convert_alpha() method after loading so that the image has per pixel transparency.
+
+pygame may not always be built to support all image formats. At minimum it will support uncompressed BMP. If pygame.image.get_extended() returns 'True', you should be able to load most images (including PNG, JPG and GIF).
+
+You should use os.path.join() for compatibility.
+
+eg. asurf = pygame.image.load(os.path.join('data', 'bla.png'))
+
+pygame.sprite - https://www.pygame.org/docs/ref/sprite.html
+
+pygame.Rect -
+pygame object for storing rectangular coordinates
+Rect(left, top, width, height) -> Rect
+Rect((left, top), (width, height)) -> Rect
+Rect(object) -> Rect
+
+pygame.draw.rect() -
+draw a rectangle
+rect(surface, color, rect) -> Rect
+rect(surface, color, rect, width=0, border_radius=0, border_top_left_radius=-1, border_top_right_radius=-1, border_bottom_left_radius=-1, border_bottom_right_radius=-1) -> Rect
+Draws a rectangle on the given surface.
+
+Parameters
+surface (Surface) -- surface to draw on
+
+color (Color or int or tuple(int, int, int, [int])) -- color to draw with, the alpha value is optional if using a tuple (RGB[A])
+
+rect (Rect) -- rectangle to draw, position and dimensions
+
+width (int) --
+
+(optional) used for line thickness or to indicate that the rectangle is to be filled (not to be confused with the width value of the rect parameter)
+
+if width == 0, (default) fill the rectangle
+if width > 0, used for line thickness
+if width < 0, nothing will be drawn
+
+Note When using width values > 1, the edge lines will grow outside the original boundary of the rect. For more details on how the thickness for edge lines grow, refer to the width notes of the pygame.draw.line()draw a straight line function.
+border_radius (int) -- (optional) used for drawing rectangle with rounded corners. The supported range is [0, min(height, width) / 2], with 0 representing a rectangle without rounded corners.
+
+border_top_left_radius (int) -- (optional) used for setting the value of top left border. If you don't set this value, it will use the border_radius value.
+
+border_top_right_radius (int) -- (optional) used for setting the value of top right border. If you don't set this value, it will use the border_radius value.
+
+border_bottom_left_radius (int) -- (optional) used for setting the value of bottom left border. If you don't set this value, it will use the border_radius value.
+
+border_bottom_right_radius (int) --
+
+(optional) used for setting the value of bottom right border. If you don't set this value, it will use the border_radius value.
+
+if border_radius < 1 it will draw rectangle without rounded corners
+if any of border radii has the value < 0 it will use value of the border_radius
+If sum of radii on the same side of the rectangle is greater than the rect size the radii
+will get scaled
+Returns
+a rect bounding the changed pixels, if nothing is drawn the bounding rect's position will be the position of the given rect parameter and its width and height will be 0
+
+Return type
+Rect
+
+Note The pygame.Surface.fill()fill Surface with a solid color method works just as well for drawing filled rectangles and can be hardware accelerated on some platforms with both software and hardware display modes.
+Changed in pygame 2.0.0: Added support for keyword arguments.
+
+Changed in pygame 2.0.0.dev8: Added support for border radius.
+
+pygame.(any group).draw()
+blit the Sprite images
+draw(Surface) -> None
+Draws the contained Sprites to the Surface argument. This uses the Sprite.image attribute for the source surface, and Sprite.rect for the position.
+
+The Group does not keep sprites in any order, so the draw order is arbitrary.
+
+pygame.image.load(something).convert() and .convert_alpha() -
+convert() removes alpha from an image greatly improving fps but making background visible while doing so.
+convert_alpha() does the same thing but with maintainence of transparency.
+
+pygame.sprite.groupcollide()
+Find all sprites that collide between two groups.
+groupcollide(group1, group2, dokill1, dokill2, collided = None) -> Sprite_dict
+This will find collisions between all the Sprites in two groups. Collision is determined by comparing the Sprite.rect attribute of each Sprite or by using the collided function if it is not None.
+
+Every Sprite inside group1 is added to the return dictionary. The value for each item is the list of Sprites in group2 that intersect.
+
+If either dokill argument is True, the colliding Sprites will be removed from their respective Group.
+
+The collided argument is a callback function used to calculate if two sprites are colliding. It should take two sprites as values and return a bool value indicating if they are colliding. If collided is not passed, then all sprites must have a "rect" value, which is a rectangle of the sprite area, which will be used to calculate the collision.
+
+pygame.sprite.spritecollideany()
+Simple test if a sprite intersects anything in a group.
+spritecollideany(sprite, group, collided = None) -> Sprite Collision with the returned sprite.
+spritecollideany(sprite, group, collided = None) -> None No collision
+If the sprite collides with any single sprite in the group, a single sprite from the group is returned. On no collision None is returned.
+
+If you don't need all the features of the pygame.sprite.spritecollide() function, this function will be a bit quicker.
+
+The collided argument is a callback function used to calculate if two sprites are colliding. It should take two sprites as values and return a bool value indicating if they are colliding. If collided is not passed, then all sprites must have a "rect" value, which is a rectangle of the sprite area, which will be used to calculate the collision.
+
+time.sleep(secs) -
+Suspend execution of the calling thread for the given number of seconds. The argument may be a floating point number to indicate a more precise sleep time. The actual suspension time may be less than that requested because any caught signal will terminate the sleep() following execution of that signal’s catching routine. Also, the suspension time may be longer than requested by an arbitrary amount because of the scheduling of other activity in the system.
+
+Changed in version 3.5: The function now sleeps at least secs even if the sleep is interrupted by a signal, except if the signal handler raises an exception (see PEP 475 for the rationale).
+
+pygame.font.SysFont() -
+create a Font object from the system fonts
+SysFont(name, size, bold=False, italic=False) -> Font
+Return a new Font object that is loaded from the system fonts. The font will match the requested bold and italic flags. Pygame uses a small set of common font aliases. If the specific font you ask for is not available, a reasonable alternative may be used. If a suitable system font is not found this will fall back on loading the default pygame font.
+
+The font name can also be an iterable of font names, a string of comma-separated font names, or a bytes of comma-separated font names, in which case the set of names will be searched in order.
+
+New in pygame 2.0.1: Accept an iterable of font names.
+
+render()
+draw text on a new Surface
+render(text, antialias, color, background=None) -> Surface
+This creates a new Surface with the specified text rendered on it. pygame provides no way to directly draw text on an existing Surface: instead you must use Font.render() to create an image (Surface) of the text, then blit this image onto another Surface.
+
+The text can only be a single line: newline characters are not rendered. Null characters ('x00') raise a TypeError. Both Unicode and char (byte) strings are accepted. For Unicode strings only UCS-2 characters ('u0001' to 'uFFFF') were previously supported and any greater unicode codepoint would raise a UnicodeError. Now, characters in the UCS-4 range are supported. For char strings a LATIN1 encoding is assumed. The antialias argument is a boolean: if true the characters will have smooth edges. The color argument is the color of the text [e.g.: (0,0,255) for blue]. The optional background argument is a color to use for the text background. If no background is passed the area outside the text will be transparent.
+
+The Surface returned will be of the dimensions required to hold the text. (the same as those returned by Font.size()). If an empty string is passed for the text, a blank surface will be returned that is zero pixel wide and the height of the font.
+
+Depending on the type of background and antialiasing used, this returns different types of Surfaces. For performance reasons, it is good to know what type of image will be used. If antialiasing is not used, the return image will always be an 8-bit image with a two-color palette. If the background is transparent a colorkey will be set. Antialiased images are rendered to 24-bit RGB images. If the background is transparent a pixel alpha will be included.
+
+Optimization: if you know that the final destination for the text (on the screen) will always have a solid background, and the text is antialiased, you can improve performance by specifying the background color. This will cause the resulting image to maintain transparency information by colorkey rather than (much less efficient) alpha values.
+If you render '\n' an unknown char will be rendered. Usually a rectangle. Instead you need to handle new lines yourself.
+
+Font rendering is not thread safe: only a single thread can render text at any time.
+
+Changed in pygame 2.0.3: Rendering UCS_4 unicode works and does not raise an exception. Use if hasattr(pygame.font, 'UCS_4'): to see if pygame supports rendering UCS_4 unicode including more languages and emoji.
+
+collidepoint() -
+test if a point is inside a rectangle
+collidepoint(x, y) -> bool
+collidepoint((x,y)) -> bool
+Returns true if the given point is inside the rectangle. A point along the right or bottom edge is not considered to be inside the rectangle.
+
+Note For collision detection between a rect and a line the clipline() method can be used.
+
+search up format and round in python docs as well as music.
+
+<rect(0, 0, 207, 224)>

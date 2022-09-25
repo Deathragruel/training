@@ -1,0 +1,8 @@
+List: (Can find all interesting modules in https://pymotw.com/ (called python module of the week))
+- random(includes functions like randint and choice)
+- json(includes dump and load)
+- unittest (for unit tests and test cases)
+- sys (tools)
+- pygame (for making a game.) (access https://www.pygame.org/docs/ to learn
+                               and to make better games.)
+- time(contains sleep which can pause the game.)
